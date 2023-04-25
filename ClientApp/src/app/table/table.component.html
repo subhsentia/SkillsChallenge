@@ -1,0 +1,12 @@
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="columns">
+  <thead>
+    <tr>
+      <th *ngFor="let column of columns" [style.color]="color">{{column.Header}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of rows">
+      <td *ngFor="let column of columns" [style.color]="color">{{ row[column.PropName] }}</td>
+    </tr>
+  </tbody>
+</table>
