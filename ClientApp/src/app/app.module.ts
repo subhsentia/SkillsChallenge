@@ -27,9 +27,10 @@ export const ThemeChanger = new InjectionToken<BehaviorSubject<string>>('changes
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      /*{ path: '', component: HomeComponent, pathMatch: 'full' },*/
       { path: 'people', loadComponent: () => import('./people/people.component').then(m => m.PeopleComponent) },
-      { path: 'things', loadComponent: () => import('./things/things.component').then(m => m.ThingsComponent) }
+      { path: 'things', loadComponent: () => import('./things/things.component').then(m => m.ThingsComponent) },
+      { path: '', redirectTo: 'people', pathMatch: 'full' },
     ]),
     StoreModule.forRoot({}, {})
   ],
