@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using InterviewTest.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace InterviewTest.Controllers
 {
@@ -7,32 +8,26 @@ namespace InterviewTest.Controllers
     [ApiController]
     public class PlacesController : ControllerBase
     {
-        private static readonly List<Place> _places = new List<Place>() {
-            new Place()
-            {
-                Name = "Big Ben",
-                City = "London",
-                State = "UK"
-            },
-            new Place()
-            {
-                Name = "Willis Tower",
-                City = "Chicago",
-                State = "Illinois"
-            }
-        };
+       private readonly PlaceContext _context;
 
         private readonly ILogger<PlacesController> _logger;
 
-        public PlacesController(ILogger<PlacesController> logger)
+        public PlacesController(ILogger<PlacesController> logger, PlaceContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
+
         [HttpGet]
-        public IEnumerable<Place> GetPlaces()
+        public async Task<ActionResult<IEnumerable<Place>>> Get(string? filter)
         {
-            return _places;
+            if (!string.IsNullOrEmpty(filter))
+            {
+                return await _context.Places.Where(p => p.Name.ToLower().Contains(filter.ToLower()) || p.City.ToLower().Contains(filter.ToLower()) || p.State.ToLower().Contains(filter.ToLower())).ToListAsync();
+            }
+
+            return await _context.Places.ToListAsync();
         }
     }
 }

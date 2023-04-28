@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using InterviewTest.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace InterviewTest.Controllers
 {
@@ -7,32 +8,27 @@ namespace InterviewTest.Controllers
     [Route("api/[controller]")]
     public class PeopleController : ControllerBase
     {
-        private static readonly List<Person> People = new List<Person>(){
-            new Person()
-            {
-                FirstName = "Jim",
-                LastName = "Parsons",
-                Birthday = new DateTime(1977,2,20)
-            },
-             new Person()
-            {
-                FirstName = "Tony",
-                LastName = "Smith",
-                Birthday = new DateTime(1937,6,10)
-            }
-
-        };
+        private readonly PersonContext _context;
+      
 
         private readonly ILogger<PeopleController> _logger;
 
-        public PeopleController(ILogger<PeopleController> logger) { 
+        public PeopleController(ILogger<PeopleController> logger, PersonContext context) { 
             _logger = logger;
+            _context = context; 
         }
 
+
+
         [HttpGet]
-        public IEnumerable<Person> Get()
+        public async Task<ActionResult<IEnumerable<Person>>> Get(string? filter)
         {
-            return People;
+            if(!string.IsNullOrEmpty(filter))
+            {
+                return await _context.People.Where(p => p.LastName.ToLower().Contains(filter.ToLower()) || p.FirstName.ToLower().Contains(filter.ToLower())).ToListAsync();
+            }
+            
+            return await _context.People.ToListAsync();
         }
     }
 }

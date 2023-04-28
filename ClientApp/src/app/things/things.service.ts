@@ -8,7 +8,7 @@ export class ThingsService {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
-  fetch() {
-    return this.http.get<any[]>(this.baseUrl + 'api/things');
+  fetch(filter = '') {
+    return this.http.get<any[]>(this.baseUrl + `api/things?filter=${filter}`);
   }
 }
