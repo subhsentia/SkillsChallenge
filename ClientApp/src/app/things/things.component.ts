@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { TableComponent } from '../table/table.component';
 import { TableData } from '../table-data';
 import { ThingsService } from './things.service';
+import { QuickSearchDirective } from '../quick-search.directive';
 
 @Component({
   selector: 'app-things',
   standalone: true,
-  imports: [CommonModule, TableComponent],
+  imports: [CommonModule, TableComponent, QuickSearchDirective],
   templateUrl: './things.component.html',
   styleUrls: ['./things.component.css']
 })
@@ -30,7 +31,11 @@ export class ThingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.service.fetch().subscribe(value => {
+    this.search();
+  }
+
+  search(filter = '') {
+    this.service.fetch(filter).subscribe(value => {
       this.rows = value;
       this.isLoading = false;
       this.cd.detectChanges();

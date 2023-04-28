@@ -4,11 +4,11 @@ import { Inject, Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class PeopleService {
+export class InitializeService {
 
   constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string) { }
 
-  fetch(filter = '') {
-    return this.http.get<any[]>(this.baseUrl + `api/people?filter=${filter}`);
+  fetch() {
+    return this.http.get<any[]>(this.baseUrl + 'api/initialize');
   }
 }

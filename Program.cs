@@ -1,8 +1,16 @@
+using InterviewTest.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+// Add DbContext
+builder.Services.AddDbContext<PersonContext>(opt => opt.UseInMemoryDatabase("People"));
+builder.Services.AddDbContext<PlaceContext>(opt => opt.UseInMemoryDatabase("Places"));
+builder.Services.AddDbContext<ThingContext>(opt => opt.UseInMemoryDatabase("Things"));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

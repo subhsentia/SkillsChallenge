@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { TableComponent } from '../table/table.component';
 import { PeopleService } from './people.service';
 import { TableData } from '../table-data';
+import { QuickSearchDirective } from '../quick-search.directive';
 
 @Component({
   selector: 'app-people',
   standalone: true,
-  imports: [CommonModule, TableComponent],
+  imports: [CommonModule, TableComponent, QuickSearchDirective],
   templateUrl: './people.component.html',
   styleUrls: ['./people.component.css']
 })
@@ -34,7 +35,11 @@ export class PeopleComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.service.fetch().subscribe(value => {
+    this.search();
+  }
+
+  search(filter = '') {
+    this.service.fetch(filter).subscribe(value => {
       this.rows = value;
       this.isLoading = false;
       this.cd.detectChanges();
