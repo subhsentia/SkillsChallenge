@@ -4,8 +4,6 @@ import { TableComponent } from '../table/table.component';
 import { PeopleService } from './people.service';
 import { TableData } from '../table-data';
 import { QuickSearchDirective } from '../quick-search.directive';
-import { Subscription } from 'rxjs';
-import { OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-people',
@@ -14,7 +12,7 @@ import { OnDestroy } from '@angular/core';
   templateUrl: './people.component.html',
   styleUrls: ['./people.component.css']
 })
-export class PeopleComponent implements OnInit, OnDestroy {
+export class PeopleComponent implements OnInit {
   isLoading = true;
   rows!: { [key: string]: any }[];
   readonly columns: TableData[] = [
@@ -32,9 +30,6 @@ export class PeopleComponent implements OnInit, OnDestroy {
     }
   ];
 
-  subscription: Subscription = new Subscription;
-
-
   constructor(private service: PeopleService, private cd: ChangeDetectorRef) {
 
   }
@@ -44,15 +39,11 @@ export class PeopleComponent implements OnInit, OnDestroy {
   }
 
   search(filter = '') {
-    this.subscription = this.service.fetch(filter).subscribe(value => {
+    this.service.fetch(filter).subscribe(value => {
       this.rows = value;
       this.isLoading = false;
       this.cd.detectChanges();
     });
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
 }

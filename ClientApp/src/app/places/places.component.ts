@@ -4,8 +4,6 @@ import { TableComponent } from '../table/table.component';
 import { PlacesService } from './places.service';
 import { TableData } from '../table-data';
 import { QuickSearchDirective } from '../quick-search.directive';
-import { OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-places',
@@ -14,7 +12,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './places.component.html',
   styleUrls: ['./places.component.css']
 })
-export class PlacesComponent implements OnInit,OnDestroy {
+export class PlacesComponent implements OnInit {
   isLoading = true;
   rows!: { [key: string]: any }[];
   readonly columns: TableData[] = [
@@ -28,8 +26,6 @@ export class PlacesComponent implements OnInit,OnDestroy {
     }
   ];
 
-  subscription: Subscription = new Subscription;
-
   constructor(private service: PlacesService, private cd: ChangeDetectorRef) {
 
   }
@@ -39,15 +35,11 @@ export class PlacesComponent implements OnInit,OnDestroy {
   }
 
   search(filter = '') {
-    this.subscription =this.service.fetch(filter).subscribe(value => {
+    this.service.fetch(filter).subscribe(value => {
       this.rows = value;
       this.isLoading = false;
       this.cd.detectChanges();
     });
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
 }
